@@ -6,7 +6,8 @@ import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton";
 import { Link } from 'expo-router'
-
+import { getCurrentUser, signIn } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -16,8 +17,39 @@ const SignIn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
 
+  /**
+   * Submits the sign-in form and handles the sign-in process.
+   * If the email and password fields are empty, it displays an alert message asking the user to fill in all fields.
+   * If the fields are not empty, it sets the `isSubmitting` state to `true`.
+   * Then, it calls the `signIn` function with the email and password from the `form` object.
+   * After that, it calls the `getCurrentUser` function and awaits its result. It then sets the `user` state with the result and sets the `isLogged` state to `true`.
+   * If the sign-in and getting the current user are successful, it displays a success alert message and navigates to the "/home" route using the `router.replace` function.
+   * If there is an error during the sign-in or getting the current user, it displays an error alert message with the error message.
+   * Finally, it sets the `isSubmitting` state to `false`.
+   * @return {Promise<void>} A Promise that resolves when the sign-in process is complete.
+  */
+  const submit = async () => {
+    if (form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+
+    try {
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLogged(true);
+
+      Alert.alert("Success", "User signed in successfully");
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

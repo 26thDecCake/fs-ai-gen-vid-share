@@ -1,12 +1,13 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { images } from '../../constants'
 import FormField from '../../components/FormField'
 import CustomButton from "../../components/CustomButton";
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { createUser } from '../../lib/appwrite'
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 
 const SignUp = () => {
@@ -18,8 +19,33 @@ const SignUp = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {
-    createUser();
+  const { setUser, setIsLogged } = useGlobalContext();
+
+  /**
+  * This code snippet defines an asynchronous function called submit. It first checks if the username, email, or password fields in the form object are empty. If any of them are empty, it displays an error alert.
+  * If all the fields are filled, it sets the submitting state to true. Then, it tries to create a user using the createUser function, passing in the email, password, and username from the form object. If the user is created successfully, it sets the user state to the result and sets the isLogged state to true.
+  * After that, it uses the router.replace function to navigate to the "/home" route.
+  * If any error occurs during the process, it displays an error alert with the error message.
+  * Finally, it sets the submitting state to false, regardless of whether the process was successful or not.
+  * @return {Promise<void>} A Promise that resolves when the sign-up process is complete.
+  */
+  const submit = async () => {
+    if (form.username === "" || form.email === "" || form.password === "") {
+      Alert.alert("Error", "Please fill in all fields");
+    }
+
+    setSubmitting(true);
+    try {
+      const result = await createUser(form.email, form.password, form.username);
+      setUser(result);
+      setIsLogged(true);
+
+      router.replace("/home");
+    } catch (error) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
