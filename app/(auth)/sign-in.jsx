@@ -1,23 +1,25 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView, Image, Dimensions, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { images } from '../../constants'
-import FormField from '../../components/FormField'
-import CustomButton from "../../components/CustomButton";
-import { Link } from 'expo-router'
+// import FormField from '../../components/FormField'
+// import CustomButton from "../../components/CustomButton";
+import { CustomButton, FormField } from "../../components";
+import { Link, router } from 'expo-router'
 import { getCurrentUser, signIn } from "../../lib/appwrite";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 const SignIn = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
+
+  const [isSubmitting, setSubmitting] = useState(false);
+  
   const [form, setForm] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { setUser, setIsLogged } = useGlobalContext();
 
   /**
    * Submits the sign-in form and handles the sign-in process.
@@ -55,7 +57,12 @@ const SignIn = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-        <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+        <View
+          className="w-full justify-center min-h-[85vh] px-4 my-6"
+          style={{
+            minHeight: Dimensions.get("window").height - 100,
+          }}
+        >
           <Image 
             source={images.logo}
             resizeMode='contain'

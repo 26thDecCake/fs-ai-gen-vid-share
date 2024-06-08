@@ -5,13 +5,6 @@ import { getCurrentUser } from "../lib/appwrite";
 const GlobalContext = createContext();
 export const useGlobalContext = () => useContext(GlobalContext);
 
-/**
- * Creates a global context provider component that manages user authentication state and loading status.
- *
- * @param {Object} props - The component props.
- * @param {ReactNode} props.children - The child components to be rendered within the provider.
- * @return {ReactNode} The global context provider component.
- */
 const GlobalProvider = ({ children }) => {
   const [isLogged, setIsLogged] = useState(false);
   const [user, setUser] = useState(null);

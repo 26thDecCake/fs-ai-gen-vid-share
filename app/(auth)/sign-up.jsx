@@ -1,25 +1,28 @@
-import { View, Text, ScrollView, Image, Alert } from 'react-native'
+import { View, Text, ScrollView, Image, Alert, Dimensions } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { images } from '../../constants'
-import FormField from '../../components/FormField'
-import CustomButton from "../../components/CustomButton";
+// import FormField from '../../components/FormField'
+// import CustomButton from "../../components/CustomButton";
+import { CustomButton, FormField } from "../../components";
 import { Link, router } from 'expo-router'
 import { createUser } from '../../lib/appwrite'
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { useGlobalContext } from '../../context/GlobalProvider';
 
 
 const SignUp = () => {
+  const { setUser, setIsLogged } = useGlobalContext();
+
+  const [isSubmitting, setSubmitting] = useState(false);
+  
   const [form, setForm] = useState({
-    username: '',
-    email: '',
-    password: ''
+    username: "",
+    email: "",
+    password: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { setUser, setIsLogged } = useGlobalContext();
+  
 
   /**
   * This code snippet defines an asynchronous function called submit. It first checks if the username, email, or password fields in the form object are empty. If any of them are empty, it displays an error alert.
@@ -51,7 +54,12 @@ const SignUp = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-        <View className="w-full justify-center min-h-[85vh] px-4 my-6">
+        <View
+          className="w-full justify-center min-h-[85vh] px-4 my-6"
+          style={{
+            minHeight: Dimensions.get("window").height - 100,
+          }}  
+        >
           <Image 
             source={images.logo}
             resizeMode='contain'
@@ -63,13 +71,22 @@ const SignUp = () => {
           <FormField
             title="Username"
             value={form.username}
-            handleChangeText={(text) => setForm({ ...form, email: text })}
+            handleChangeText={(e) => setForm({ ...form, username: e })}
             otherStyles="mt-10"
           />
+
+          <FormField
+            title="Email"
+            value={form.email}
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            otherStyles="mt-7"
+            keyboardType="email-address"
+          />
+
           <FormField
             title="Password"
             value={form.password}
-            handleChangeText={(text) => setForm({ ...form, password: text })}
+            handleChangeText={(e) => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
