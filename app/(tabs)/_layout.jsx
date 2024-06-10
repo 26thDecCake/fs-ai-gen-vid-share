@@ -26,7 +26,7 @@ const TabIcon = ( { icon, color, name, focused }) => {
 }
 
 const TabsLayout = () => {
-  const { loading, isLogged } = useGlobalContext();
+  const { user, loading, isLogged } = useGlobalContext();
 
   if (!loading && !isLogged) return <Redirect href="/sign-in" />;
 
@@ -47,6 +47,7 @@ const TabsLayout = () => {
       >
         <Tabs.Screen
           name="home"
+          user={user}
           options={{
             title: "Home",
             headerShown: false,

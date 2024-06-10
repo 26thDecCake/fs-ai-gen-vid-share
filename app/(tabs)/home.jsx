@@ -7,10 +7,9 @@ import useAppwrite from "../../lib/useAppwrite";
 import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
 
-const Home = () => {
+const Home = ({ user }) => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
-  // const { user } = useGlobalContext();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -19,8 +18,6 @@ const Home = () => {
     await refetch();
     setRefreshing(false);
   };
-
-  console.log(posts);
 
   return (
     <SafeAreaView className="bg-primary">
@@ -40,7 +37,7 @@ const Home = () => {
                   Welcome Back
                 </Text>
                 <Text className="text-2xl font-psemibold text-white">
-                  rthan
+                  {user?.username}
                 </Text>
               </View>
 
