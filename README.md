@@ -1,4 +1,4 @@
-# AI Generated Video Sharing App
+# AI Generated Video Sharing Mobile App
 
 This is a video conference web application[^1] built using React Native with Expo and NativeWind.
 
