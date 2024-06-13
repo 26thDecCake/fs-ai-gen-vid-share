@@ -47,7 +47,6 @@ const TabsLayout = () => {
       >
         <Tabs.Screen
           name="home"
-          user={user}
           options={{
             title: "Home",
             headerShown: false,
